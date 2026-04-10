@@ -1,178 +1,126 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
+#include <memory>
+
+#include <MyFramework/core/Object.h>
+#include <MyFramework/core/Event.h>
+#include <MyFramework/render/Renderer.h>
 
 namespace MyFramework {
 
 class Layout;
-class Window;
-struct Theme;
+class EffectStack;
 
 /**
- * @brief Base class for all UI elements.
+ * @brief Base UI element for all visible components.
  *
- * Provides positioning, parenting, rendering,
- * and event handling functionality.
+ * Widgets are:
+ * - Renderable
+ * - Event-aware
+ * - Layout-compatible
+ * - Effect-enabled
  */
-class Widget {
+class Widget : public Object {
 public:
-    Widget();
+    explicit Widget(Object* parent = nullptr);
     virtual ~Widget();
 
-    // Disable copy
-    Widget(const Widget&) = delete;
-    Widget& operator=(const Widget&) = delete;
+    // =========================
+    // Geometry
+    // =========================
+    void setPosition(float x, float y);
+    void setSize(float width, float height);
 
-    // Allow move
-    Widget(Widget&&) = default;
-    Widget& operator=(Widget&&) = default;
+    float x() const;
+    float y() const;
+    float width() const;
+    float height() const;
 
-    /**
-     * @brief Shows the widget.
-     */
-    void show();
-
-    /**
-     * @brief Hides the widget.
-     */
-    void hide();
-
-    /**
-     * @brief Returns visibility state.
-     */
+    // =========================
+    // Visibility
+    // =========================
+    void setVisible(bool visible);
     bool isVisible() const;
 
-    /**
-     * @brief Sets parent widget.
-     */
-    void setParent(Widget* parent);
+    void setEnabled(bool enabled);
+    bool isEnabled() const;
+
+    // =========================
+    // Rendering
+    // =========================
 
     /**
-     * @brief Gets parent widget.
+     * @brief Called every frame by Renderer.
      */
-    Widget* parent() const;
+    virtual void render(Renderer& renderer);
 
     /**
-     * @brief Adds a child widget.
+     * @brief Internal render pipeline hook.
      */
-    void addChild(Widget* child);
+    virtual void paint(Renderer& renderer);
+
+    // =========================
+    // Event handling
+    // =========================
 
     /**
-     * @brief Removes a child widget.
+     * @brief Main event entry point.
      */
-    void removeChild(Widget* child);
+    virtual bool handleEvent(Event& event);
 
-    /**
-     * @brief Returns all children.
-     */
-    const std::vector<Widget*>& children() const;
+    virtual bool onMouseMove(Event& event);
+    virtual bool onMousePress(Event& event);
+    virtual bool onMouseRelease(Event& event);
+    virtual bool onKeyPress(Event& event);
+    virtual bool onKeyRelease(Event& event);
 
-    /**
-     * @brief Sets widget position.
-     */
-    void setPosition(int x, int y);
+    // =========================
+    // Layout
+    // =========================
 
-    /**
-     * @brief Sets widget size.
-     */
-    void setSize(int width, int height);
-
-    /**
-     * @brief Gets X position.
-     */
-    int x() const;
-
-    /**
-     * @brief Gets Y position.
-     */
-    int y() const;
-
-    /**
-     * @brief Gets width.
-     */
-    int width() const;
-
-    /**
-     * @brief Gets height.
-     */
-    int height() const;
-
-    /**
-     * @brief Requests a redraw.
-     */
-    void update();
-
-    /**
-     * @brief Sets layout for this widget.
-     */
     void setLayout(Layout* layout);
-
-    /**
-     * @brief Gets layout.
-     */
     Layout* layout() const;
 
     /**
-     * @brief Applies a theme to this widget.
+     * @brief Requests layout update.
      */
-    virtual void applyTheme(const Theme& theme);
+    void updateLayout();
 
-    /**
-     * @brief Returns owning window.
-     */
-    Window* window() const;
+    // =========================
+    // Effects
+    // =========================
+
+    void setEffectStack(EffectStack* stack);
+    EffectStack* effectStack() const;
+
+    // =========================
+    // Hierarchy overrides
+    // =========================
+
+    void addChild(Widget* child);
+    void removeChild(Widget* child);
 
 protected:
-    /**
-     * @brief Paint event (override in subclasses).
-     */
-    virtual void paint();
+    // Geometry
+    float m_x;
+    float m_y;
+    float m_width;
+    float m_height;
 
-    /**
-     * @brief Called when widget is resized.
-     */
-    virtual void onResize(int width, int height);
+    // State
+    bool m_visible;
+    bool m_enabled;
 
-    /**
-     * @brief Mouse press event.
-     */
-    virtual void onMousePress(int x, int y);
-
-    /**
-     * @brief Mouse release event.
-     */
-    virtual void onMouseRelease(int x, int y);
-
-    /**
-     * @brief Mouse move event.
-     */
-    virtual void onMouseMove(int x, int y);
-
-    /**
-     * @brief Key press event.
-     */
-    virtual void onKeyPress(int key);
-
-    /**
-     * @brief Key release event.
-     */
-    virtual void onKeyRelease(int key);
-
-private:
-    Widget* m_parent;
-    std::vector<Widget*> m_children;
-
+    // Layout system
     Layout* m_layout;
 
-    int m_x;
-    int m_y;
-    int m_width;
-    int m_height;
+    // Effects system
+    EffectStack* m_effectStack;
 
-    bool m_visible;
-
-    Theme* m_theme;
+    // Rendering cache/state
+    bool m_needsRedraw;
 };
 
 } // namespace MyFramework
