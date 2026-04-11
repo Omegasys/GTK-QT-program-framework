@@ -1,0 +1,26 @@
+{
+  "demo": "blur_effect",
+
+  "input": {
+    "type": "procedural_ui",
+    "resolution": [1280, 720],
+    "pattern": "checkerboard"
+  },
+
+  "effect": {
+    "type": "blur",
+    "kernel_size": 5,
+    "intensity": 1.0,
+    "passes": 2
+  },
+
+  "framegraph": {
+    "enabled": true,
+    "pass_name": "BlurPass"
+  },
+
+  "output": {
+    "preview": true,
+    "save_result": false
+  }
+}
