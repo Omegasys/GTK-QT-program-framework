@@ -1,1 +1,14 @@
+{
+  "name": "Glow Pass",
+  "type": "compute",
 
+  "inputs": ["blur_buffer"],
+  "outputs": ["glow_buffer"],
+
+  "effect": {
+    "shader": "glow.comp",
+    "radius": 10,
+    "strength": 1.5,
+    "threshold": 0.6
+  }
+}
