@@ -1,0 +1,12 @@
+{
+  "name": "Composite Pass",
+  "type": "render",
+
+  "inputs": ["glow_buffer"],
+  "outputs": ["final_output"],
+
+  "settings": {
+    "tone_mapping": true,
+    "gamma_correction": true
+  }
+}
