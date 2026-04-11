@@ -1,57 +1,57 @@
-#include <MyFramework/theme/ThemeManager.h>
-#include <MyFramework/theme/ThemeParser.h>
-#include <MyFramework/utils/Time.h>
+#include "ThemeManager.h"
 
-namespace MyFramework {
+#include <MyFramework/utils/Logger.h>
 
-ThemeManager::ThemeManager()
-    : m_currentTheme(),
-      m_lastTheme() {}
+using namespace std;
 
-void ThemeManager::loadFromConfig(const Config& config) {
-    m_scheduler = ThemeScheduler();
+ThemeManager& ThemeManager::instance() {
+    static ThemeManager inst;
+    return inst;
+}
 
-    for (const auto& [key, value] : config.values()) {
-        // Example: "08:00-12:00:#xxxxxx-..."
-        auto colon = value.find(':');
-        auto dash  = value.find('-');
+ThemeManager::ThemeManager() {
+    // Register built-in themes
+    themes["default"] = loadDefaultTheme();
+    themes["dark"] = {
+        Color(30, 30, 30),
+        Color(220, 220, 220),
+        1.0f
+    };
+}
 
-        if (colon == std::string::npos || dash == std::string::npos)
-            continue;
+void ThemeManager::loadTheme(const std::string& name) {
+    auto it = themes.find(name);
 
-        std::string timeRange = value.substr(0, colon);
-        std::string themeStr  = value.substr(colon + 1);
-
-        int startH, startM, endH, endM;
-        sscanf(timeRange.c_str(), "%d:%d-%d:%d", &startH, &startM, &endH, &endM);
-
-        int startMin = startH * 60 + startM;
-        int endMin   = endH * 60 + endM;
-
-        Theme theme = ThemeParser::parseThemeString(themeStr);
-        m_scheduler.addTimeRange(startMin, endMin, theme);
+    if (it != themes.end()) {
+        activeTheme = it->second;
+        Logger::info("Loaded theme: " + name);
+    } else {
+        Logger::warn("Theme not found: " + name + ", using fallback");
+        activeTheme = loadFallbackTheme();
     }
 }
 
-void ThemeManager::update() {
-    Theme newTheme = m_scheduler.currentTheme();
-
-    if (m_transition.isActive()) {
-        m_transition.update((float)Time::deltaTime());
-        m_currentTheme = m_transition.current();
-        return;
-    }
-
-    if (newTheme.leftColor.r != m_currentTheme.leftColor.r) {
-        m_transition.start(m_currentTheme, newTheme, 1.0f);
-        m_lastTheme = m_currentTheme;
-    }
-
-    m_currentTheme = newTheme;
+void ThemeManager::setTheme(const std::string& name) {
+    loadTheme(name);
 }
 
 const Theme& ThemeManager::currentTheme() const {
-    return m_currentTheme;
+    return activeTheme;
 }
 
-} // namespace MyFramework
+Theme ThemeManager::loadDefaultTheme() {
+    Theme t;
+    t.background = Color(240, 240, 240);
+    t.foreground = Color(20, 20, 20);
+    t.opacity = 1.0f;
+    return t;
+}
+
+Theme ThemeManager::loadFallbackTheme() {
+    // Emergency fallback (guaranteed safe)
+    Theme t;
+    t.background = Color(50, 50, 50);
+    t.foreground = Color(255, 255, 255);
+    t.opacity = 1.0f;
+    return t;
+}
