@@ -1,0 +1,13 @@
+{
+  "name": "Blur Pass",
+  "type": "compute",
+
+  "inputs": ["ui_buffer"],
+  "outputs": ["blur_buffer"],
+
+  "effect": {
+    "shader": "blur.comp",
+    "kernel_size": 5,
+    "iterations": 2
+  }
+}
