@@ -1,0 +1,25 @@
+{
+  "name": "neon",
+  "colors": {
+    "background": "#0a0a0a",
+    "panel": "#111111",
+    "text": "#39ff14",
+    "accent": "#ff00ff",
+    "border": "#00ffff"
+  },
+
+  "gradient": {
+    "type": "linear",
+    "stops": [
+      { "position": 0.0, "color": "#ff00ff" },
+      { "position": 0.5, "color": "#00ffff" },
+      { "position": 1.0, "color": "#39ff14" }
+    ]
+  },
+
+  "effects": {
+    "blur": true,
+    "glow": true,
+    "shadow": false
+  }
+}
