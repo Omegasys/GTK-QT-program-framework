@@ -1,0 +1,24 @@
+{
+  "theme": "inspector_dark",
+
+  "colors": {
+    "background": "#1e1e1e",
+    "panel": "#252526",
+    "border": "#3c3c3c",
+    "text": "#d4d4d4",
+    "accent": "#569cd6",
+    "highlight": "#264f78"
+  },
+
+  "fonts": {
+    "default": "Inter",
+    "monospace": "JetBrainsMono",
+    "size": 14
+  },
+
+  "ui": {
+    "padding": 8,
+    "margin": 6,
+    "border_radius": 4
+  }
+}
