@@ -1,0 +1,33 @@
+{
+  "demo": "glow_effect",
+
+  "input": {
+    "type": "procedural_ui",
+    "resolution": [1280, 720],
+    "elements": [
+      {
+        "shape": "circle",
+        "x": 640,
+        "y": 360,
+        "radius": 80,
+        "intensity": 1.0
+      }
+    ]
+  },
+
+  "effect": {
+    "type": "glow",
+    "radius": 12,
+    "strength": 1.5,
+    "threshold": 0.6
+  },
+
+  "framegraph": {
+    "enabled": true,
+    "pass_name": "GlowPass"
+  },
+
+  "output": {
+    "preview": true
+  }
+}
