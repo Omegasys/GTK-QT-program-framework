@@ -1,0 +1,39 @@
+{
+  "layout": "framegraph_debugger",
+
+  "window": {
+    "width": 1400,
+    "height": 900
+  },
+
+  "panels": [
+    {
+      "name": "GraphCanvas",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 900
+    },
+    {
+      "name": "PassInspector",
+      "x": 1000,
+      "y": 0,
+      "width": 400,
+      "height": 450
+    },
+    {
+      "name": "ResourceTracker",
+      "x": 1000,
+      "y": 450,
+      "width": 400,
+      "height": 250
+    },
+    {
+      "name": "ExecutionTimeline",
+      "x": 1000,
+      "y": 700,
+      "width": 400,
+      "height": 200
+    }
+  ]
+}
