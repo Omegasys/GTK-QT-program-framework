@@ -21,6 +21,12 @@ static std::vector<std::string> split(const std::string& str, char delim) {
     return tokens;
 }
 
+redshift.enabled=true
+redshift.night_temp=3500
+redshift.day_temp=6500
+redshift.start=20
+redshift.end=6
+
 Theme parseThemeString(const std::string& data) {
     Theme theme{};
 
