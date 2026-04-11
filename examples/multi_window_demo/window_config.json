@@ -1,0 +1,23 @@
+{
+  "multi_window_demo": true,
+
+  "backend": {
+    "type": "auto",
+    "shared_context": true
+  },
+
+  "windows": [
+    {
+      "title": "Main Window",
+      "width": 800,
+      "height": 600,
+      "vsync": true
+    },
+    {
+      "title": "Secondary Window",
+      "width": 800,
+      "height": 600,
+      "vsync": true
+    }
+  ]
+}
