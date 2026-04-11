@@ -21,6 +21,14 @@ void Renderer::clear(const Color& color) {
               << color.r << "," << color.g << "," << color.b << "\n";
 }
 
+float temp = RedshiftManager::instance().getTemperature();
+
+// pseudo: convert temp → RGB tint
+Color tint = computeTemperatureTint(temp);
+
+// apply to all draw commands
+finalColor *= tint;
+
 void Renderer::drawRect(float x, float y, float w, float h, const Color& color) {
     m_commands.push_back(DrawCommand::rect(x, y, w, h, color));
 }
