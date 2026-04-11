@@ -1,0 +1,21 @@
+{
+  "layout": "multi_window",
+
+  "arrangement": [
+    {
+      "id": "window_0",
+      "position": [100, 100],
+      "size": [800, 600]
+    },
+    {
+      "id": "window_1",
+      "position": [950, 100],
+      "size": [800, 600]
+    }
+  ],
+
+  "sync": {
+    "shared_render_backend": true,
+    "shared_resources": true
+  }
+}
