@@ -1,0 +1,130 @@
+{
+  "name": "GQFusion_Main_FrameGraph",
+
+  "description": "Full GPU UI + compute post-processing pipeline",
+
+  "resources": {
+    "ui_color_buffer": {
+      "type": "texture",
+      "format": "rgba8",
+      "usage": "render_target"
+    },
+
+    "blur_buffer": {
+      "type": "texture",
+      "format": "rgba8",
+      "usage": "compute_write"
+    },
+
+    "glow_buffer": {
+      "type": "texture",
+      "format": "rgba16f",
+      "usage": "compute_write"
+    },
+
+    "shadow_buffer": {
+      "type": "texture",
+      "format": "r8",
+      "usage": "compute_write"
+    },
+
+    "final_output": {
+      "type": "texture",
+      "format": "swapchain",
+      "usage": "present"
+    }
+  },
+
+  "passes": [
+    {
+      "name": "UI_Render_Pass",
+      "type": "render",
+      "inputs": [],
+      "outputs": ["ui_color_buffer"],
+      "backend": "raster",
+      "description": "Renders GPU-driven widget tree"
+    },
+
+    {
+      "name": "Shadow_Compute_Pass",
+      "type": "compute",
+      "inputs": ["ui_color_buffer"],
+      "outputs": ["shadow_buffer"],
+      "shader": "shadow.comp",
+      "workgroup": [16, 16, 1],
+      "description": "Generates soft UI shadows"
+    },
+
+    {
+      "name": "Blur_Compute_Pass",
+      "type": "compute",
+      "inputs": ["ui_color_buffer"],
+      "outputs": ["blur_buffer"],
+      "shader": "blur.comp",
+      "workgroup": [16, 16, 1],
+      "params": {
+        "kernel_size": 5,
+        "iterations": 2
+      },
+      "description": "Gaussian blur for glass UI effects"
+    },
+
+    {
+      "name": "Glow_Compute_Pass",
+      "type": "compute",
+      "inputs": ["blur_buffer"],
+      "outputs": ["glow_buffer"],
+      "shader": "glow.comp",
+      "workgroup": [16, 16, 1],
+      "params": {
+        "threshold": 0.6,
+        "strength": 1.5
+      },
+      "description": "Bloom-style glow effect"
+    },
+
+    {
+      "name": "Redshift_Compute_Pass",
+      "type": "compute",
+      "inputs": ["glow_buffer"],
+      "outputs": ["glow_buffer"],
+      "shader": "redshift.comp",
+      "workgroup": [16, 16, 1],
+      "params": {
+        "temperature": 0.25,
+        "tint": [1.0, 0.95, 0.9]
+      },
+      "description": "Color grading / theme adjustment"
+    },
+
+    {
+      "name": "Composite_Pass",
+      "type": "render",
+      "inputs": [
+        "ui_color_buffer",
+        "glow_buffer",
+        "shadow_buffer"
+      ],
+      "outputs": ["final_output"],
+      "backend": "raster",
+      "description": "Final composition to swapchain"
+    }
+  ],
+
+  "execution": {
+    "order": [
+      "UI_Render_Pass",
+      "Shadow_Compute_Pass",
+      "Blur_Compute_Pass",
+      "Glow_Compute_Pass",
+      "Redshift_Compute_Pass",
+      "Composite_Pass"
+    ],
+
+    "optimization": {
+      "parallel_compute": true,
+      "resource_aliasing": true,
+      "skip_unused_passes": true
+    }
+  }
+}
