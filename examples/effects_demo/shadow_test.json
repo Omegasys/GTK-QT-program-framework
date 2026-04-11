@@ -1,0 +1,32 @@
+{
+  "demo": "shadow_effect",
+
+  "input": {
+    "type": "ui_layout",
+    "layout": {
+      "button": {
+        "x": 400,
+        "y": 300,
+        "width": 200,
+        "height": 60
+      }
+    }
+  },
+
+  "effect": {
+    "type": "shadow",
+    "offset": [10, 10],
+    "blur_radius": 8,
+    "opacity": 0.5,
+    "direction": "bottom_right"
+  },
+
+  "framegraph": {
+    "enabled": true,
+    "pass_name": "ShadowPass"
+  },
+
+  "output": {
+    "preview": true
+  }
+}
