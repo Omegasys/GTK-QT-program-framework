@@ -1,0 +1,29 @@
+{
+  "layout": "default",
+
+  "panels": [
+    {
+      "name": "Hierarchy",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 900
+    },
+
+    {
+      "name": "Viewport",
+      "x": 300,
+      "y": 0,
+      "width": 900,
+      "height": 900
+    },
+
+    {
+      "name": "Inspector",
+      "x": 1200,
+      "y": 0,
+      "width": 200,
+      "height": 900
+    }
+  ]
+}
