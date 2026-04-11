@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.16)
+project(framegraph_debugger)
+
+set(CMAKE_CXX_STANDARD 20)
+
+include_directories(../../include)
+
+file(GLOB SRC_FILES
+    src/*.cpp
+    ui/*.cpp
+)
+
+add_executable(framegraph_debugger
+    ${SRC_FILES}
+)
+
+target_link_libraries(framegraph_debugger
+    GQFusion
+)
