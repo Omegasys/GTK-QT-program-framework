@@ -1,0 +1,29 @@
+{
+  "root": {
+    "type": "panel",
+    "x": 0,
+    "y": 0,
+    "width": 800,
+    "height": 600,
+
+    "children": [
+      {
+        "type": "button",
+        "x": 100,
+        "y": 100,
+        "width": 200,
+        "height": 60,
+        "text": "Click Me"
+      },
+
+      {
+        "type": "label",
+        "x": 100,
+        "y": 200,
+        "width": 300,
+        "height": 40,
+        "text": "GPU UI Rendering Active"
+      }
+    ]
+  }
+}
