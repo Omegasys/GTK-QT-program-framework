@@ -1,0 +1,22 @@
+#version 450
+
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(binding = 0, rgba8) uniform image2D inputImage;
+layout(binding = 1, rgba8) uniform image2D outputImage;
+
+void main() {
+    ivec2 pix = ivec2(gl_GlobalInvocationID.xy);
+
+    vec4 color = vec4(0.0);
+
+    for (int x = -2; x <= 2; x++) {
+        for (int y = -2; y <= 2; y++) {
+            color += imageLoad(inputImage, pix + ivec2(x, y));
+        }
+    }
+
+    color /= 25.0;
+
+    imageStore(outputImage, pix, color);
+}
