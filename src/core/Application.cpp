@@ -1,6 +1,17 @@
 #include <MyFramework/core/Application.h>
 #include <MyFramework/platform/Platform.h>
 #include <MyFramework/utils/Time.h>
+#include <MyFramework/system_ui/SystemUIManager.h>
+
+void Application::run() {
+    SystemUIManager::instance().initialize();
+
+    while (running) {
+        // existing loop...
+
+        SystemUIManager::instance().update();
+    }
+}
 
 namespace MyFramework {
 
