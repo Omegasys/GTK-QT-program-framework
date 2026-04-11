@@ -1,0 +1,17 @@
+{
+  "workspace": "default",
+
+  "active_layout": "dock_layout.json",
+
+  "open_files": [
+    "shader.comp",
+    "theme.json",
+    "layout.json"
+  ],
+
+  "settings": {
+    "auto_save": true,
+    "grid_snap": true,
+    "show_fps": true
+  }
+}
