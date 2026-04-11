@@ -1,61 +1,157 @@
-#include <MyFramework/render/Renderer.h>
-#include <iostream>
+#include <GQFusion/render/Renderer.h>
+#include <GQFusion/render/rendererbackend.h>
+#include <GQFusion/render/RenderTarget.h>
+#include <GQFusion/effects/EffectStack.h>
 
-namespace MyFramework {
+#include <memory>
 
-Renderer::Renderer()
-    : m_target(nullptr) {}
+namespace GQFusion {
 
-void Renderer::begin(Widget* root, RenderTarget* target) {
-    m_target = target;
-    m_commands.clear();
+// ------------------------------------------------------------
+// Singleton
+// ------------------------------------------------------------
+
+static Renderer* s_instance = nullptr;
+
+Renderer& Renderer::instance() {
+    if (!s_instance) {
+        s_instance = new Renderer();
+    }
+    return *s_instance;
 }
 
-void Renderer::end() {
-    flush();
+// ------------------------------------------------------------
+// Lifecycle
+// ------------------------------------------------------------
+
+Renderer::Renderer() = default;
+
+Renderer::~Renderer() {
+    shutdown();
 }
 
-void Renderer::clear(const Color& color) {
-    // Placeholder (real backend clears framebuffer)
-    std::cout << "[Renderer] Clear: "
-              << color.r << "," << color.g << "," << color.b << "\n";
+bool Renderer::initialize(std::unique_ptr<RendererBackend> backendImpl,
+                          int width,
+                          int height) {
+    backend = std::move(backendImpl);
+
+    if (!backend || !backend->initialize()) {
+        return false;
+    }
+
+    viewportWidth = width;
+    viewportHeight = height;
+
+    // Create main render target (offscreen buffer)
+    mainTarget = std::make_unique<RenderTarget>();
+    mainTarget->create(width, height);
+
+    return true;
 }
 
-float temp = RedshiftManager::instance().getTemperature();
+void Renderer::shutdown() {
+    if (backend) {
+        backend->shutdown();
+        backend.reset();
+    }
 
-// pseudo: convert temp → RGB tint
-Color tint = computeTemperatureTint(temp);
-
-// apply to all draw commands
-finalColor *= tint;
-
-void Renderer::drawRect(float x, float y, float w, float h, const Color& color) {
-    m_commands.push_back(DrawCommand::rect(x, y, w, h, color));
+    mainTarget.reset();
 }
 
-void Renderer::drawText(float x, float y, const std::string& text, const Color& color) {
-    m_commands.push_back(DrawCommand::text(x, y, text, color));
-}
+// ------------------------------------------------------------
+// Frame Control
+// ------------------------------------------------------------
 
-void Renderer::flush() {
-    // For now: debug output instead of real rendering
-    for (const auto& cmd : m_commands) {
-        switch (cmd.type) {
-            case DrawCommand::Type::Rect:
-                std::cout << "[DrawRect] "
-                          << cmd.x << "," << cmd.y
-                          << " size=" << cmd.width << "x" << cmd.height
-                          << "\n";
-                break;
+void Renderer::beginFrame() {
+    if (!backend) return;
 
-            case DrawCommand::Type::Text:
-                std::cout << "[DrawText] "
-                          << cmd.text << " at "
-                          << cmd.x << "," << cmd.y
-                          << "\n";
-                break;
-        }
+    backend->beginFrame();
+
+    // Render UI into offscreen target
+    if (mainTarget) {
+        backend->bindRenderTarget(mainTarget.get());
     }
 }
 
-} // namespace MyFramework
+void Renderer::endFrame() {
+    if (!backend) return;
+
+    // 🔥 Apply compute-based post-processing
+    runComputeEffects();
+
+    backend->endFrame();
+    backend->present();
+}
+
+// ------------------------------------------------------------
+// Drawing
+// ------------------------------------------------------------
+
+void Renderer::drawRect(float x, float y, float w, float h) {
+    if (!backend) return;
+    backend->drawRect(x, y, w, h);
+}
+
+// ------------------------------------------------------------
+// Compute Effects Pipeline
+// ------------------------------------------------------------
+
+void Renderer::runComputeEffects() {
+    if (!effectStack || !backend) return;
+
+    const auto& effects = effectStack->getComputeEffects();
+
+    for (const auto& effect : effects) {
+        if (!effect) continue;
+
+        void* shader = effect->getComputeShader();
+        if (!shader) continue;
+
+        backend->bindComputeShader(shader);
+
+        // Dispatch size based on viewport (rounded up)
+        int groupSizeX = (viewportWidth  + 15) / 16;
+        int groupSizeY = (viewportHeight + 15) / 16;
+
+        backend->dispatchCompute(groupSizeX, groupSizeY, 1);
+    }
+}
+
+// ------------------------------------------------------------
+// Effect Stack
+// ------------------------------------------------------------
+
+void Renderer::setEffectStack(EffectStack* stack) {
+    effectStack = stack;
+}
+
+// ------------------------------------------------------------
+// Resize Handling
+// ------------------------------------------------------------
+
+void Renderer::resize(int width, int height) {
+    viewportWidth = width;
+    viewportHeight = height;
+
+    if (mainTarget) {
+        mainTarget->resize(width, height);
+    }
+}
+
+// ------------------------------------------------------------
+// Accessors
+// ------------------------------------------------------------
+
+int Renderer::getWidth() const {
+    return viewportWidth;
+}
+
+int Renderer::getHeight() const {
+    return viewportHeight;
+}
+
+RendererBackend* Renderer::getBackend() {
+    return backend.get();
+}
+
+} // namespace GQFusion
