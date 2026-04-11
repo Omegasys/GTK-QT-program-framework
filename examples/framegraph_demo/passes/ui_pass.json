@@ -1,0 +1,12 @@
+{
+  "name": "UI Pass",
+  "type": "render",
+
+  "inputs": [],
+  "outputs": ["ui_buffer"],
+
+  "settings": {
+    "render_ui": true,
+    "gpu_instancing": true
+  }
+}
