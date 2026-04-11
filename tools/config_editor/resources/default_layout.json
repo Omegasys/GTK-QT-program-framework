@@ -1,0 +1,73 @@
+{
+  "window": {
+    "title": "Config Editor",
+    "width": 1200,
+    "height": 800,
+    "resizable": true,
+    "initial_state": "normal"
+  },
+
+  "layout": {
+    "type": "split_horizontal",
+
+    "left_panel": {
+      "type": "split_vertical",
+
+      "top": {
+        "type": "widget",
+        "name": "ConfigView",
+        "dock": true,
+        "size_ratio": 0.6
+      },
+
+      "bottom": {
+        "type": "widget",
+        "name": "TimeFrameEditor",
+        "dock": true,
+        "size_ratio": 0.4
+      }
+    },
+
+    "right_panel": {
+      "type": "split_vertical",
+
+      "top": {
+        "type": "widget",
+        "name": "LivePreviewPanel",
+        "dock": true,
+        "size_ratio": 0.7
+      },
+
+      "bottom": {
+        "type": "split_horizontal",
+
+        "left": {
+          "type": "widget",
+          "name": "ThemeSlotEditor",
+          "dock": true,
+          "size_ratio": 0.5
+        },
+
+        "right": {
+          "type": "widget",
+          "name": "ColorPicker",
+          "dock": true,
+          "size_ratio": 0.5
+        }
+      }
+    }
+  },
+
+  "behavior": {
+    "live_reload_layout": true,
+    "allow_user_rearrange": true,
+    "save_on_exit": true,
+    "restore_previous_session": true
+  },
+
+  "theme": {
+    "use_system_theme": false,
+    "default_theme": "dark_editor",
+    "sync_with_framework_theme": true
+  }
+}
