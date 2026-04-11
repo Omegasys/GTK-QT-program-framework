@@ -1,0 +1,39 @@
+{
+  "layout": "inspector_default",
+
+  "window": {
+    "width": 1200,
+    "height": 800
+  },
+
+  "panels": [
+    {
+      "name": "WidgetTree",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 800
+    },
+    {
+      "name": "Properties",
+      "x": 300,
+      "y": 0,
+      "width": 400,
+      "height": 800
+    },
+    {
+      "name": "EventMonitor",
+      "x": 700,
+      "y": 0,
+      "width": 500,
+      "height": 400
+    },
+    {
+      "name": "RenderOverlay",
+      "x": 700,
+      "y": 400,
+      "width": 500,
+      "height": 400
+    }
+  ]
+}
