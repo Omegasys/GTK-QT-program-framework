@@ -1,60 +1,43 @@
-#include "MyFramework/theme/ThemeScheduler.h"
-#include "MyFramework/theme/ThemeBlender.h"
-#include <stdexcept>
+#include <MyFramework/theme/ThemeScheduler.h>
+#include <ctime>
 
 namespace MyFramework {
 
-int ThemeScheduler::timeToMinutes(const std::string& time) {
-    int hours = std::stoi(time.substr(0, 2));
-    int mins  = std::stoi(time.substr(3, 2));
-    return hours * 60 + mins;
+static int currentMinutes() {
+    std::time_t t = std::time(nullptr);
+    std::tm* now = std::localtime(&t);
+    return now->tm_hour * 60 + now->tm_min;
 }
 
-Theme ThemeScheduler::resolveTheme(
-    const std::vector<ThemeEntry>& themes,
-    const Theme& fallback,
-    const std::string& currentTime
-) {
-    int now = timeToMinutes(currentTime);
+void ThemeScheduler::addTimeRange(int startMin, int endMin, const Theme& theme) {
+    m_ranges.push_back({startMin, endMin, theme});
+}
 
-    std::vector<const ThemeEntry*> active;
+Theme ThemeScheduler::currentTheme() const {
+    int now = currentMinutes();
 
-    for (const auto& t : themes) {
-        int start = timeToMinutes(t.start);
-        int end   = timeToMinutes(t.end);
+    for (const auto& r : m_ranges) {
+        if (now >= r.start && now <= r.end)
+            return r.theme;
+    }
 
-        if (start <= now && now < end) {
-            active.push_back(&t);
+    return m_fallback;
+}
+
+bool ThemeScheduler::hasOverlap() const {
+    for (size_t i = 0; i < m_ranges.size(); ++i) {
+        for (size_t j = i + 1; j < m_ranges.size(); ++j) {
+            if (!(m_ranges[i].end < m_ranges[j].start ||
+                  m_ranges[j].end < m_ranges[i].start)) {
+                return true;
+            }
         }
     }
-
-    // No active themes → fallback
-    if (active.empty()) {
-        return fallback;
-    }
-
-    // Only one active theme
-    if (active.size() == 1) {
-        return active[0]->theme;
-    }
-
-    // Two or more → blend first two (can extend later)
-    const ThemeEntry* a = active[0];
-    const ThemeEntry* b = active[1];
-
-    int startA = timeToMinutes(a->start);
-    int endA   = timeToMinutes(a->end);
-
-    int overlapStart = std::max(startA, timeToMinutes(b->start));
-    int overlapEnd   = std::min(endA,   timeToMinutes(b->end));
-
-    if (overlapEnd <= overlapStart) {
-        return a->theme; // fallback to first if no real overlap
-    }
-
-    float t = float(now - overlapStart) / float(overlapEnd - overlapStart);
-
-    return ThemeBlender::blend(a->theme, b->theme, t);
+    return false;
 }
 
+void ThemeScheduler::setFallback(const Theme& theme) {
+    m_fallback = theme;
 }
+
+} // namespace MyFramework
