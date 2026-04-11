@@ -1,0 +1,22 @@
+{
+  "layout": "dock",
+
+  "dock_tree": {
+    "type": "split",
+    "orientation": "horizontal",
+    "children": [
+      {
+        "type": "panel",
+        "name": "Scene"
+      },
+      {
+        "type": "split",
+        "orientation": "vertical",
+        "children": [
+          { "type": "panel", "name": "Viewport" },
+          { "type": "panel", "name": "Properties" }
+        ]
+      }
+    ]
+  }
+}
