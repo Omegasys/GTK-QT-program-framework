@@ -1,0 +1,36 @@
+{
+  "name": "redshift_presets",
+  "description": "Time-of-day theme transitions",
+
+  "presets": [
+    {
+      "time": 6.0,
+      "label": "morning",
+      "temperature": 5000,
+      "theme": "light.theme.json"
+    },
+    {
+      "time": 12.0,
+      "label": "day",
+      "temperature": 6500,
+      "theme": "default.theme.json"
+    },
+    {
+      "time": 18.0,
+      "label": "evening",
+      "temperature": 4500,
+      "theme": "dark.theme.json"
+    },
+    {
+      "time": 22.0,
+      "label": "night",
+      "temperature": 3200,
+      "theme": "neon.theme.json"
+    }
+  ],
+
+  "transition": {
+    "type": "smooth",
+    "duration_minutes": 30
+  }
+}
