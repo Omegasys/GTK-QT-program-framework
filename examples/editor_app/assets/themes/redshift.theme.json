@@ -1,0 +1,35 @@
+{
+  "name": "Redshift",
+  "version": 1,
+  "colors": {
+    "background": "#1b1410",
+    "surface": "#241b16",
+    "surface_variant": "#2e221c",
+    "primary": "#ff9966",
+    "secondary": "#ffcc99",
+    "accent": "#ff5e5e",
+    "text": "#f2e6dc",
+    "text_muted": "#c9b7a9",
+    "border": "#3a2b24",
+    "selection": "#5a3a2e",
+    "error": "#ff6b6b",
+    "warning": "#ffb86b",
+    "success": "#8fd694"
+  },
+  "ui": {
+    "border_radius": 7,
+    "padding": 9,
+    "font_family": "Inter",
+    "font_size": 13,
+    "line_height": 1.5
+  },
+  "editor": {
+    "caret_color": "#ffd1b3",
+    "line_highlight": "#2a1f19",
+    "gutter_background": "#1a120e"
+  },
+  "effects": {
+    "reduced_blue_light": true,
+    "contrast_boost": 0.15
+  }
+}
