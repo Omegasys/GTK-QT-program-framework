@@ -1,0 +1,34 @@
+{
+  "name": "neon",
+  "inherits": "default",
+
+  "colors": {
+    "background": "#0a0a0a",
+    "panel": "#111111",
+    "text": "#39ff14",
+    "accent": "#ff00ff",
+    "border": "#00ffff"
+  },
+
+  "gradient": {
+    "type": "linear",
+    "angle": 45,
+    "stops": [
+      { "position": 0.0, "color": "#ff00ff" },
+      { "position": 0.5, "color": "#00ffff" },
+      { "position": 1.0, "color": "#39ff14" }
+    ]
+  },
+
+  "effects": {
+    "blur": true,
+    "glow": true,
+    "glow_strength": 1.2,
+    "shadow": false
+  },
+
+  "animation": {
+    "duration": 0.15,
+    "easing": "linear"
+  }
+}
