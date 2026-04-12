@@ -1,0 +1,19 @@
+{
+  "name": "dark",
+  "inherits": "default",
+
+  "colors": {
+    "background": "#121212",
+    "panel": "#1e1e1e",
+    "text": "#ffffff",
+    "accent": "#bb86fc",
+    "border": "#2c2c2c"
+  },
+
+  "effects": {
+    "blur": true,
+    "glow": false,
+    "shadow": true,
+    "shadow_strength": 0.5
+  }
+}
