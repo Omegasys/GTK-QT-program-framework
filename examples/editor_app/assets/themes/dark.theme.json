@@ -1,0 +1,31 @@
+{
+  "name": "Dark",
+  "version": 1,
+  "colors": {
+    "background": "#1e1e1e",
+    "surface": "#252526",
+    "surface_variant": "#2d2d30",
+    "primary": "#4ec9b0",
+    "secondary": "#569cd6",
+    "accent": "#c586c0",
+    "text": "#d4d4d4",
+    "text_muted": "#9da1a6",
+    "border": "#3c3c3c",
+    "selection": "#264f78",
+    "error": "#f44747",
+    "warning": "#ffcc66",
+    "success": "#6a9955"
+  },
+  "ui": {
+    "border_radius": 6,
+    "padding": 8,
+    "font_family": "Inter",
+    "font_size": 13,
+    "line_height": 1.4
+  },
+  "editor": {
+    "caret_color": "#ffffff",
+    "line_highlight": "#2a2d2e",
+    "gutter_background": "#1b1b1b"
+  }
+}
