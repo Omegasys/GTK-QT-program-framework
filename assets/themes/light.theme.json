@@ -1,0 +1,19 @@
+{
+  "name": "light",
+  "inherits": "default",
+
+  "colors": {
+    "background": "#f5f5f5",
+    "panel": "#ffffff",
+    "text": "#202020",
+    "accent": "#007acc",
+    "border": "#d0d0d0"
+  },
+
+  "effects": {
+    "blur": false,
+    "glow": false,
+    "shadow": true,
+    "shadow_strength": 0.2
+  }
+}
